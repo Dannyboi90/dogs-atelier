@@ -38,8 +38,11 @@ main,
 }
 
 .wordmark {
+  color: inherit;
   font-size: 18px;
+  font-weight: 700;
   letter-spacing: -0.7px;
+  text-decoration: none;
 }
 
 .collection-mark {
@@ -312,6 +315,11 @@ legend span {
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 11px;
+}
+
+.back-home {
+  color: inherit;
+  text-underline-offset: 3px;
 }
 
 .asset-message,
