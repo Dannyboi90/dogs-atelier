@@ -11,7 +11,44 @@
       "items": [
         { "id": "none", "name": "Bare", "file": null },
         { "id": "blue", "name": "Sapphire smoke", "file": "images/atelier/eyeshadow-blue.webp", "color": "#7f98bd" },
-        { "id": "lilac", "name": "Lilac veil", "file": "images/atelier/eyeshadow-lilac.webp", "color": "#b4a0bc" }
+        { "id": "lilac", "name": "Lilac veil", "file": "images/atelier/eyeshadow-lilac.webp", "color": "#b4a0bc" },
+        {
+          "id": "disco",
+          "name": "Disco Supernova",
+          "file": "images/atelier/eyeshadow-disco.webp",
+          "color": "#d92a91",
+          "translateY": -125,
+          "opacity": 0.9
+        },
+        {
+          "id": "gold",
+          "name": "Golden Sun",
+          "file": "images/atelier/eyeshadow-gold.webp",
+          "color": "#b18b36",
+          "translateY": -45,
+          "opacity": 0.92
+        },
+        {
+          "id": "pink",
+          "name": "Electric rose",
+          "file": "images/atelier/eyeshadow-blue.webp",
+          "color": "#db64b6",
+          "hue": 95
+        },
+        {
+          "id": "copper",
+          "name": "Copper crush",
+          "file": "images/atelier/eyeshadow-blue.webp",
+          "color": "#c28a54",
+          "hue": 175
+        },
+        {
+          "id": "ice",
+          "name": "Silver frost",
+          "file": "images/atelier/eyeshadow-lilac.webp",
+          "color": "#c1c8d5",
+          "filter": "saturate(0) brightness(1.25)"
+        }
       ]
     },
     {
@@ -28,7 +65,35 @@
       "items": [
         { "id": "none", "name": "Unadorned", "file": null },
         { "id": "sapphire", "name": "Sapphire satin", "file": "images/atelier/shawl-sapphire.webp", "color": "#24427f" },
-        { "id": "plum", "name": "Plum velvet", "file": "images/atelier/shawl-plum.webp", "color": "#6d355a" }
+        { "id": "plum", "name": "Plum velvet", "file": "images/atelier/shawl-plum.webp", "color": "#6d355a" },
+        {
+          "id": "rose",
+          "name": "Fuchsia velvet",
+          "file": "images/atelier/shawl-plum.webp",
+          "color": "#b92882",
+          "filter": "sepia(1) saturate(4) hue-rotate(285deg) brightness(1.15)"
+        },
+        {
+          "id": "ruby",
+          "name": "Ruby velvet",
+          "file": "images/atelier/shawl-plum.webp",
+          "color": "#a72743",
+          "filter": "sepia(1) saturate(5) hue-rotate(315deg)"
+        },
+        {
+          "id": "amber",
+          "name": "Amber velvet",
+          "file": "images/atelier/shawl-plum.webp",
+          "color": "#ae7d25",
+          "filter": "sepia(1) saturate(2) brightness(1.25)"
+        },
+        {
+          "id": "silver",
+          "name": "Silver velvet",
+          "file": "images/atelier/shawl-plum.webp",
+          "color": "#a9acb7",
+          "filter": "saturate(0) brightness(1.45)"
+        }
       ]
     },
     {
@@ -69,6 +134,29 @@
       "name": "Absolutely no occasion",
       "caption": "She has nowhere to be and has dressed accordingly.",
       "choices": { "eyes": "lilac", "finish": "rose", "shawl": "sapphire", "jewelry": "pearl" }
+    },
+    {
+      "id": "disco",
+      "name": "Disco Supernova",
+      "caption": "Subtle has left the building.",
+      "choices": { "eyes": "disco", "finish": "rose", "shawl": "rose", "jewelry": "sapphire" }
+    },
+    {
+      "id": "sun",
+      "name": "Golden hour diva",
+      "caption": "A small sun. An enormous entrance.",
+      "choices": { "eyes": "gold", "finish": "rose", "shawl": "amber", "jewelry": "pearl" }
+    },
+    {
+      "id": "ice",
+      "name": "Ice queen",
+      "caption": "Cool tones. Extremely warm applause.",
+      "choices": { "eyes": "ice", "finish": "none", "shawl": "silver", "jewelry": "sapphire" }
     }
+  ],
+  "perfumes": [
+    { "id": "rose", "name": "Rose cloud", "description": "An imaginary rose-and-velvet flourish.", "color": "#e9a8cb" },
+    { "id": "moon", "name": "Midnight muse", "description": "An imaginary violet-and-starlight flourish.", "color": "#b8a4ec" },
+    { "id": "gold", "name": "Golden purr", "description": "An imaginary amber-and-sunshine flourish.", "color": "#e8c789" }
   ]
 }

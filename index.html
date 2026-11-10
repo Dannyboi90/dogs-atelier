@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <meta name="description" content="A digital styling atelier for Dog, with 54 imaginative combinations of color, silk, and jewels.">
+    <meta name="description" content="A playful digital styling atelier for Dog, with 336 imaginative combinations of color, velvet, and jewels.">
     <title>Dog’s Couture Atelier | catnamed.dog</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="atelier.css">
@@ -13,14 +13,14 @@
     <a class="skip" href="#main">Skip to atelier</a>
     <header class="site-header">
       <strong class="wordmark">catnamed.dog</strong>
-      <span class="collection-mark">THE ATELIER <i aria-hidden="true">✦</i> COLLECTION 01</span>
+      <span class="collection-mark">THE ATELIER <i aria-hidden="true">✦</i> PLAY COLLECTION 02</span>
     </header>
 
     <main id="main" tabindex="-1">
       <div class="intro">
         <p class="eyebrow">A digital styling atelier</p>
-        <h1>One muse.<br><em>Make it your own.</em></h1>
-        <p class="lede">A wash of color. A little silk. Something extraordinary at her neckline.</p>
+        <h1>One muse.<br><em>Make an entrance.</em></h1>
+        <p class="lede">More color. More sparkle. Absolutely no reason to be sensible.</p>
       </div>
 
       <div class="atelier">
@@ -31,6 +31,9 @@
               <title id="portrait-title">Dog, unadorned</title>
               <desc id="portrait-desc">An illustration of Dog, a fluffy cream-and-dark-brown cat with pale blue eyes.</desc>
               <defs>
+                <filter id="mist-soft" x="-100%" y="-100%" width="300%" height="300%">
+                  <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+                </filter>
                 <mask id="protect-eyes" maskUnits="userSpaceOnUse">
                   <rect width="1024" height="1536" fill="white"></rect>
                   <ellipse cx="410" cy="485" rx="58" ry="48" fill="black"></ellipse>
@@ -42,6 +45,7 @@
               <g id="finish-layer" mask="url(#protect-eyes)"></g>
               <g id="shawl-layer"></g>
               <g id="jewelry-layer"></g>
+              <g id="effects-layer" aria-hidden="true" pointer-events="none"></g>
             </svg>
             <p id="asset-error" class="asset-message" role="status" aria-live="polite" hidden></p>
             <div id="base-error" class="base-error" role="alert" tabindex="-1" hidden>
@@ -62,10 +66,17 @@
           <p class="helper">Choose each detail, or start with a complete look.</p>
 
           <div id="interactive" hidden>
+            <div class="fun-actions" role="group" aria-label="Styling flourishes">
+              <button id="surprise" type="button">✦ Surprise me</button>
+              <button id="replay" type="button">↻ Replay the look</button>
+            </div>
             <div class="presets" role="group" aria-label="Complete looks">
               <button type="button" data-preset="sapphire" aria-pressed="false">Sapphire evening</button>
               <button type="button" data-preset="lilac" aria-pressed="false">Lilac daydream</button>
               <button type="button" data-preset="occasion" aria-pressed="false">Absolutely no occasion</button>
+              <button type="button" data-preset="disco" aria-pressed="false">Disco Supernova</button>
+              <button type="button" data-preset="sun" aria-pressed="false">Golden hour diva</button>
+              <button type="button" data-preset="ice" aria-pressed="false">Ice queen</button>
             </div>
 
             <fieldset>
@@ -74,6 +85,11 @@
                 <button type="button" data-category="eyes" data-item="none" aria-pressed="true"><i class="swatch" style="--chip: transparent" aria-hidden="true"></i><span>Bare</span><b aria-hidden="true">✓</b></button>
                 <button type="button" data-category="eyes" data-item="blue" aria-pressed="false"><i class="swatch" style="--chip: #7f98bd" aria-hidden="true"></i><span>Sapphire smoke</span><b aria-hidden="true">✓</b></button>
                 <button type="button" data-category="eyes" data-item="lilac" aria-pressed="false"><i class="swatch" style="--chip: #b4a0bc" aria-hidden="true"></i><span>Lilac veil</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="eyes" data-item="disco" aria-pressed="false"><i class="swatch" style="--chip: #d92a91" aria-hidden="true"></i><span>Disco Supernova</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="eyes" data-item="gold" aria-pressed="false"><i class="swatch" style="--chip: #b18b36" aria-hidden="true"></i><span>Golden Sun</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="eyes" data-item="pink" aria-pressed="false"><i class="swatch" style="--chip: #db64b6" aria-hidden="true"></i><span>Electric rose</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="eyes" data-item="copper" aria-pressed="false"><i class="swatch" style="--chip: #c28a54" aria-hidden="true"></i><span>Copper crush</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="eyes" data-item="ice" aria-pressed="false"><i class="swatch" style="--chip: #c1c8d5" aria-hidden="true"></i><span>Silver frost</span><b aria-hidden="true">✓</b></button>
               </div>
             </fieldset>
 
@@ -91,6 +107,10 @@
                 <button type="button" data-category="shawl" data-item="none" aria-pressed="true"><i class="swatch" style="--chip: transparent" aria-hidden="true"></i><span>Unadorned</span><b aria-hidden="true">✓</b></button>
                 <button type="button" data-category="shawl" data-item="sapphire" aria-pressed="false"><i class="swatch" style="--chip: #24427f" aria-hidden="true"></i><span>Sapphire satin</span><b aria-hidden="true">✓</b></button>
                 <button type="button" data-category="shawl" data-item="plum" aria-pressed="false"><i class="swatch" style="--chip: #6d355a" aria-hidden="true"></i><span>Plum velvet</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="shawl" data-item="rose" aria-pressed="false"><i class="swatch" style="--chip: #b92882" aria-hidden="true"></i><span>Fuchsia velvet</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="shawl" data-item="ruby" aria-pressed="false"><i class="swatch" style="--chip: #a72743" aria-hidden="true"></i><span>Ruby velvet</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="shawl" data-item="amber" aria-pressed="false"><i class="swatch" style="--chip: #ae7d25" aria-hidden="true"></i><span>Amber velvet</span><b aria-hidden="true">✓</b></button>
+                <button type="button" data-category="shawl" data-item="silver" aria-pressed="false"><i class="swatch" style="--chip: #a9acb7" aria-hidden="true"></i><span>Silver velvet</span><b aria-hidden="true">✓</b></button>
               </div>
             </fieldset>
 
@@ -103,11 +123,37 @@
               </div>
             </fieldset>
 
+            <fieldset>
+              <legend><span>05</span> The final flourish</legend>
+              <div class="flourishes">
+                <button id="sparkle" type="button">✧ A little sparkle</button>
+                <label class="motion-label">
+                  <input id="motion" type="checkbox" checked>
+                  Animate the styling
+                </label>
+                <p id="motion-note" class="helper">Brief flourishes, only when you ask.</p>
+              </div>
+              <p class="helper">Choose an imaginary perfume, then spritz the scene.</p>
+              <div class="scents" role="group" aria-label="Imaginary perfume">
+                <button type="button" data-perfume="rose" aria-pressed="true">Rose cloud</button>
+                <button type="button" data-perfume="moon" aria-pressed="false">Midnight muse</button>
+                <button type="button" data-perfume="gold" aria-pressed="false">Golden purr</button>
+              </div>
+              <button id="spritz" class="spritz" type="button">
+                <svg aria-hidden="true" viewBox="0 0 40 50">
+                  <path d="M14 3h12v7H14zM17 10h6v5h-6zM11 15h18l5 9v19l-5 4H11l-5-4V24z" fill="none" stroke="currentColor" stroke-width="2"></path>
+                  <path d="M13 27h14v11H13z" fill="currentColor" opacity=".3"></path>
+                </svg>
+                Spritz the scene
+              </button>
+              <p id="scent-note" class="helper">An imaginary rose-and-velvet flourish.</p>
+            </fieldset>
+
             <div class="reset-row">
               <button type="button" id="reset">Reset to plain portrait <span aria-hidden="true">↺</span></button>
               <span>All imagination.</span>
             </div>
-            <p id="status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+            <p id="status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">Plain portrait selected.</p>
           </div>
 
           <p id="config-error" class="config-error" role="alert" hidden>The styling collection could not be loaded. The plain portrait is still available.</p>
@@ -123,7 +169,7 @@
 
     <footer class="site-footer">
       <span>catnamed.dog</span>
-      <span>AI-created artwork · Digital styling fiction</span>
+      <span>Play collection 02 · AI-created artwork · Digital styling fiction</span>
     </footer>
     <script type="module" src="atelier.js"></script>
   </body>

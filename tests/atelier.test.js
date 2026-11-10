@@ -15,15 +15,15 @@ const manifest = JSON.parse(await readFile(new URL("atelier-manifest.json", root
 const html = await readFile(new URL("index.html", root), "utf8");
 const css = await readFile(new URL("atelier.css", root), "utf8");
 
-test("the collection has 54 independent combinations and eight artwork files", async () => {
-  assert.equal(countCombinations(manifest), 54);
+test("the collection has 336 independent combinations and ten artwork files", async () => {
+  assert.equal(countCombinations(manifest), 336);
   const artworkFiles = [
     manifest.base,
     ...manifest.categories.flatMap((category) =>
       category.items.map((item) => item.file).filter(Boolean),
     ),
   ];
-  assert.equal(new Set(artworkFiles).size, 8);
+  assert.equal(new Set(artworkFiles).size, 10);
 
   for (const path of artworkFiles) {
     const image = await readFile(new URL(path, root));
@@ -55,6 +55,7 @@ test("every combination can be selected without changing another category", () =
 });
 
 test("each preset is complete and a category selection clears its preset", () => {
+  assert.equal(manifest.presets.length, 6);
   for (const preset of manifest.presets) {
     const state = applyPreset(createInitialState(manifest), manifest, preset.id);
     assert.deepEqual(state.choices, preset.choices);
@@ -66,6 +67,39 @@ test("each preset is complete and a category selection clears its preset", () =>
     assert.equal(updated.choices.shawl, preset.choices.shawl);
     assert.equal(updated.choices.jewelry, preset.choices.jewelry);
   }
+});
+
+test("new makeup uses its item-specific alignment and isolated color treatments", () => {
+  const eyes = manifest.categories.find((category) => category.id === "eyes");
+  const disco = eyes.items.find((item) => item.id === "disco");
+  const gold = eyes.items.find((item) => item.id === "gold");
+  const electricRose = eyes.items.find((item) => item.id === "pink");
+  const copper = eyes.items.find((item) => item.id === "copper");
+  const silver = eyes.items.find((item) => item.id === "ice");
+
+  assert.equal(disco.file, "images/atelier/eyeshadow-disco.webp");
+  assert.equal(disco.translateY, -125);
+  assert.equal(gold.file, "images/atelier/eyeshadow-gold.webp");
+  assert.equal(gold.translateY, -45);
+  assert.equal(electricRose.file, manifest.categories[0].items[1].file);
+  assert.equal(electricRose.hue, 95);
+  assert.equal(copper.hue, 175);
+  assert.match(silver.filter, /saturate\(0\)/);
+});
+
+test("velvet colorways reuse only the untrimmed velvet layer", () => {
+  const shawl = manifest.categories.find((category) => category.id === "shawl");
+  const recolors = shawl.items.filter((item) => ["rose", "ruby", "amber", "silver"].includes(item.id));
+
+  assert.equal(recolors.length, 4);
+  assert.ok(recolors.every((item) => item.file === "images/atelier/shawl-plum.webp"));
+  assert.ok(recolors.every((item) => item.filter));
+});
+
+test("imaginary perfumes are independent from styling combinations", () => {
+  assert.equal(manifest.perfumes.length, 3);
+  assert.deepEqual(manifest.perfumes.map((perfume) => perfume.id), ["rose", "moon", "gold"]);
+  assert.equal(countCombinations(manifest), 336);
 });
 
 test("reset returns to a plain portrait and invalid choices do not mutate state", () => {
@@ -84,6 +118,8 @@ test("the no-JavaScript page keeps the plain portrait and hides controls", () =>
   assert.match(html, /<div id="interactive" hidden>/);
   assert.match(html, /<noscript>/);
   assert.match(html, /Digital styling fiction\. No cosmetics or costumes applied to Dog\./);
+  assert.match(html, /336 imaginative combinations/);
+  assert.match(html, /<g id="effects-layer" aria-hidden="true" pointer-events="none">/);
 });
 
 test("the browser tab icon is a local asset", async () => {
@@ -93,6 +129,16 @@ test("the browser tab icon is a local asset", async () => {
 
 test("small-screen focus releases the sticky portrait while controls are focused", () => {
   assert.match(css, /@media \(max-width: 800px\)[\s\S]*?\.atelier:focus-within \.portrait-panel\s*\{[^}]*position: relative/);
+});
+
+test("short, opt-in effects honor reduced motion", () => {
+  assert.match(html, /id="motion" type="checkbox" checked/);
+  assert.match(html, /id="sparkle"/);
+  assert.match(html, /id="spritz"/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(css, /@keyframes paint-on/);
+  assert.match(css, /@keyframes drape-on/);
+  assert.match(css, /@keyframes jewel-on/);
 });
 
 test("the manifest preserves original canvas dimensions and rendering alignment", () => {

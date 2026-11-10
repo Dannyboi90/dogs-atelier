@@ -511,3 +511,266 @@ legend span {
     transition-duration: 0.01ms !important;
   }
 }
+
+.fun-actions {
+  display: flex;
+  gap: 10px;
+  margin: 22px 0 16px;
+}
+
+.fun-actions button {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.fun-actions #surprise {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--surface);
+}
+
+.presets {
+  margin-top: 16px;
+}
+
+.options {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.options button {
+  min-width: 0;
+  gap: 8px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.options button span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.flourishes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.flourishes > button,
+.scents button {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.motion-label {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.motion-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.motion-label input:disabled {
+  cursor: not-allowed;
+}
+
+.flourishes .helper {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.scents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.scents button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--selected);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.spritz {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 14px 0;
+  padding: 10px 20px;
+  font: italic 19px Georgia, serif;
+}
+
+.spritz svg {
+  width: 25px;
+  height: 35px;
+}
+
+#effects-layer {
+  pointer-events: none;
+}
+
+.arrival {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.paint-on {
+  animation: paint-on 650ms ease-out both;
+}
+
+.finish-on {
+  animation: finish-on 550ms ease-out both;
+}
+
+.drape-on {
+  animation: drape-on 850ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.jewel-on {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: jewel-on 700ms ease-out both;
+}
+
+.fx-star {
+  transform-box: fill-box;
+  transform-origin: center;
+  stroke: #fff1ce;
+  stroke-width: 1.3px;
+  animation: star-glow 1500ms ease-in-out both;
+}
+
+.fx-mist {
+  animation: mist-drift 1700ms ease-out both;
+}
+
+.fx-brush {
+  animation: brush-sweep 700ms ease-in-out both;
+}
+
+@keyframes paint-on {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes finish-on {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drape-on {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes jewel-on {
+  0% {
+    opacity: 0;
+    transform: translateY(-65px) scale(1.03);
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(5px) scale(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes star-glow {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  45%,
+  60% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+}
+
+@keyframes mist-drift {
+  0% {
+    opacity: 0;
+    transform: translate(70px, 40px) scale(0.9);
+  }
+  25% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-110px, -110px) scale(1.1);
+  }
+}
+
+@keyframes brush-sweep {
+  0% {
+    opacity: 0;
+    transform: translate(-80px, 0);
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(470px, 0);
+  }
+}
+
+@media (max-width: 800px) {
+  .options button {
+    gap: 6px;
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+
+  .fun-actions button {
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+
+  .dressing button {
+    scroll-margin-top: calc(38svh + 160px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paint-on,
+  .finish-on,
+  .drape-on,
+  .jewel-on,
+  .fx-star,
+  .fx-mist,
+  .fx-brush {
+    animation: none !important;
+  }
+}
