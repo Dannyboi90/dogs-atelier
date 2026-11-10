@@ -1,0 +1,11 @@
+{
+  "name": "dogs-couture-atelier",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

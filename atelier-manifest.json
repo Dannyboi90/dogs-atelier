@@ -1,0 +1,74 @@
+{
+  "canvas": {
+    "width": 1024,
+    "height": 1536
+  },
+  "base": "images/atelier/dog-base.webp",
+  "categories": [
+    {
+      "id": "eyes",
+      "label": "Eyeshadow",
+      "items": [
+        { "id": "none", "name": "Bare", "file": null },
+        { "id": "blue", "name": "Sapphire smoke", "file": "images/atelier/eyeshadow-blue.webp", "color": "#7f98bd" },
+        { "id": "lilac", "name": "Lilac veil", "file": "images/atelier/eyeshadow-lilac.webp", "color": "#b4a0bc" }
+      ]
+    },
+    {
+      "id": "finish",
+      "label": "Finishing touch",
+      "items": [
+        { "id": "none", "name": "Natural", "file": null },
+        { "id": "rose", "name": "Rose lumière", "file": "images/atelier/blush-rose.webp", "color": "#d2ada6" }
+      ]
+    },
+    {
+      "id": "shawl",
+      "label": "The drape",
+      "items": [
+        { "id": "none", "name": "Unadorned", "file": null },
+        { "id": "sapphire", "name": "Sapphire satin", "file": "images/atelier/shawl-sapphire.webp", "color": "#24427f" },
+        { "id": "plum", "name": "Plum velvet", "file": "images/atelier/shawl-plum.webp", "color": "#6d355a" }
+      ]
+    },
+    {
+      "id": "jewelry",
+      "label": "The jewels",
+      "items": [
+        { "id": "none", "name": "No jewels", "file": null },
+        { "id": "sapphire", "name": "Sapphire heirloom", "file": "images/atelier/jewelry-sapphire.webp", "color": "#294d91" },
+        { "id": "pearl", "name": "Pearl & amethyst", "file": "images/atelier/jewelry-pearl.webp", "color": "#dbcfbc" }
+      ]
+    }
+  ],
+  "rendering": {
+    "eyes": { "mask": "protect-eyes", "opacity": 0.9, "translateY": -25 },
+    "finish": { "mask": "protect-eyes", "translateY": -110, "opacity": 0.3 },
+    "shawl": {},
+    "jewelry": { "translateY": -140 }
+  },
+  "eyeProtection": [
+    { "cx": 410, "cy": 485, "rx": 58, "ry": 48 },
+    { "cx": 620, "cy": 485, "rx": 58, "ry": 48 }
+  ],
+  "presets": [
+    {
+      "id": "sapphire",
+      "name": "Sapphire evening",
+      "caption": "A little silk. A very grand entrance.",
+      "choices": { "eyes": "blue", "finish": "none", "shawl": "sapphire", "jewelry": "sapphire" }
+    },
+    {
+      "id": "lilac",
+      "name": "Lilac daydream",
+      "caption": "Soft shimmer. Pearls. No particular plans.",
+      "choices": { "eyes": "lilac", "finish": "rose", "shawl": "plum", "jewelry": "pearl" }
+    },
+    {
+      "id": "occasion",
+      "name": "Absolutely no occasion",
+      "caption": "She has nowhere to be and has dressed accordingly.",
+      "choices": { "eyes": "lilac", "finish": "rose", "shawl": "sapphire", "jewelry": "pearl" }
+    }
+  ]
+}
