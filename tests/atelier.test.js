@@ -15,7 +15,7 @@ const manifest = JSON.parse(await readFile(new URL("atelier-manifest.json", root
 const html = await readFile(new URL("index.html", root), "utf8");
 const css = await readFile(new URL("atelier.css", root), "utf8");
 
-test("the collection has 336 independent combinations and ten artwork files", async () => {
+test("the collection has 336 independent combinations and all artwork files", async () => {
   assert.equal(countCombinations(manifest), 336);
   const artworkFiles = [
     manifest.base,
@@ -23,7 +23,7 @@ test("the collection has 336 independent combinations and ten artwork files", as
       category.items.map((item) => item.file).filter(Boolean),
     ),
   ];
-  assert.equal(new Set(artworkFiles).size, 10);
+  assert.equal(new Set(artworkFiles).size, 17);
 
   for (const path of artworkFiles) {
     const image = await readFile(new URL(path, root));
@@ -69,7 +69,7 @@ test("each preset is complete and a category selection clears its preset", () =>
   }
 });
 
-test("new makeup uses its item-specific alignment and isolated color treatments", () => {
+test("makeup colorways use dedicated, swatch-matched artwork", () => {
   const eyes = manifest.categories.find((category) => category.id === "eyes");
   const disco = eyes.items.find((item) => item.id === "disco");
   const gold = eyes.items.find((item) => item.id === "gold");
@@ -81,19 +81,49 @@ test("new makeup uses its item-specific alignment and isolated color treatments"
   assert.equal(disco.translateY, -125);
   assert.equal(gold.file, "images/atelier/eyeshadow-gold.webp");
   assert.equal(gold.translateY, -45);
-  assert.equal(electricRose.file, manifest.categories[0].items[1].file);
-  assert.equal(electricRose.hue, 95);
-  assert.equal(copper.hue, 175);
-  assert.match(silver.filter, /saturate\(0\)/);
+  assert.equal(electricRose.file, "images/atelier/eyeshadow-pink.webp");
+  assert.equal(electricRose.color, "#db64b6");
+  assert.equal(copper.file, "images/atelier/eyeshadow-copper.webp");
+  assert.equal(copper.color, "#c28a54");
+  assert.equal(silver.file, "images/atelier/eyeshadow-ice.webp");
+  assert.equal(silver.color, "#c1c8d5");
+  assert.ok([electricRose, copper, silver].every((item) => !item.hue && !item.filter));
 });
 
-test("velvet colorways reuse only the untrimmed velvet layer", () => {
+test("velvet colorways keep fabric texture in dedicated, swatch-matched artwork", () => {
   const shawl = manifest.categories.find((category) => category.id === "shawl");
   const recolors = shawl.items.filter((item) => ["rose", "ruby", "amber", "silver"].includes(item.id));
 
   assert.equal(recolors.length, 4);
-  assert.ok(recolors.every((item) => item.file === "images/atelier/shawl-plum.webp"));
-  assert.ok(recolors.every((item) => item.filter));
+  assert.deepEqual(recolors.map((item) => item.file), [
+    "images/atelier/shawl-fuchsia.webp",
+    "images/atelier/shawl-ruby.webp",
+    "images/atelier/shawl-amber.webp",
+    "images/atelier/shawl-silver.webp",
+  ]);
+  assert.ok(recolors.every((item) => item.color && !item.filter));
+});
+
+test("option labels and swatches match the manifest", () => {
+  const options = [...html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)]
+    .map(([, attributes, content]) => ({
+      category: attributes.match(/\bdata-category="([^"]+)"/)?.[1],
+      item: attributes.match(/\bdata-item="([^"]+)"/)?.[1],
+      name: content.match(/<span>([^<]*)<\/span>/)?.[1]?.replaceAll("&amp;", "&"),
+      color: content.match(/--chip:\s*([^";]+)/)?.[1],
+    }))
+    .filter((option) => option.category);
+
+  assert.equal(options.length, manifest.categories.reduce((total, category) => total + category.items.length, 0));
+
+  for (const category of manifest.categories) {
+    for (const item of category.items) {
+      const option = options.find((entry) => entry.category === category.id && entry.item === item.id);
+      assert.ok(option, `Missing ${category.id}/${item.id} control`);
+      assert.equal(option.name, item.name, `${category.id}/${item.id} label`);
+      assert.equal(option.color, item.color ?? "transparent", `${category.id}/${item.id} swatch`);
+    }
+  }
 });
 
 test("imaginary perfumes are independent from styling combinations", () => {

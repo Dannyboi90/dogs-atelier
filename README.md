@@ -22,4 +22,4 @@ Then open `http://localhost:4173`.
 
 ## Artwork and styling
 
-The ten aligned WebP artwork layers are losslessly encoded at their original 1024 by 1536 dimensions. Their URLs, item-specific alignment transforms, eye-protection masks, color treatments, category choices, and presets are listed in `atelier-manifest.json`. Colorways reuse the existing accessory layers and never recolor the portrait.
+The seventeen aligned WebP artwork layers are losslessly encoded at their original 1024 by 1536 dimensions. Their URLs, item-specific alignment transforms, eye-protection masks, color treatments, category choices, and presets are listed in `atelier-manifest.json`. Dedicated colorway layers preserve the original fabric and makeup texture without recoloring the portrait.
