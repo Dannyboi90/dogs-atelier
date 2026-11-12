@@ -23,3 +23,7 @@ Then open `http://localhost:4173`.
 ## Artwork and styling
 
 The seventeen aligned WebP artwork layers are losslessly encoded at their original 1024 by 1536 dimensions. Their URLs, item-specific alignment transforms, eye-protection masks, color treatments, category choices, and presets are listed in `atelier-manifest.json`. Dedicated colorway layers preserve the original fabric and makeup texture without recoloring the portrait.
+
+## Disco Diva
+
+The optional Disco Diva player uses the supplied `Her Name Is Dog (The Main Event)` MP3 unchanged. Its native controls provide play/pause, volume, and seeking; the separate stop button, transcript, and visual-effects controls work independently from the styling controls. The accompanying 768-pixel mirror-ball WebP is a compressed derivative of the supplied black-background Magnific artwork and uses screen blending; the original master remains outside this repository. The lyrics and spoken passages are supplied in `assets/disco/lyrics.txt`.

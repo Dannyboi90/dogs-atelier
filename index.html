@@ -8,6 +8,7 @@
     <title>Dog’s Couture Atelier | catnamed.dog</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="atelier.css">
+    <link rel="stylesheet" href="disco.css">
   </head>
   <body>
     <a class="skip" href="#main">Skip to atelier</a>
@@ -47,6 +48,11 @@
               <g id="jewelry-layer"></g>
               <g id="effects-layer" aria-hidden="true" pointer-events="none"></g>
             </svg>
+            <div class="disco-visuals" id="disco-visuals" aria-hidden="true">
+              <div class="disco-lights"><i></i><i></i><i></i></div>
+              <div class="disco-ball"><img src="assets/disco/mirror-ball.webp" alt="" width="768" height="768"></div>
+              <canvas id="disco-confetti"></canvas>
+            </div>
             <p id="asset-error" class="asset-message" role="status" aria-live="polite" hidden></p>
             <div id="base-error" class="base-error" role="alert" tabindex="-1" hidden>
               <p>The portrait could not load. Check your connection, then try again.</p>
@@ -149,6 +155,39 @@
               <p id="scent-note" class="helper">An imaginary rose-and-velvet flourish.</p>
             </fieldset>
 
+            <fieldset class="disco-player">
+              <legend><span>06</span> Disco Diva</legend>
+              <p class="disco-track-title" id="disco-track-title">Her Name Is Dog <span>(The Main Event)</span></p>
+              <audio
+                id="disco-audio"
+                controls
+                preload="metadata"
+                aria-labelledby="disco-track-title"
+                src="assets/disco/her-name-is-dog.mp3"
+              ></audio>
+              <a class="disco-transcript" href="assets/disco/lyrics.txt">Read the lyrics and spoken passages</a>
+              <div class="disco-options">
+                <label class="disco-effects-toggle" for="disco-effects">
+                  <input id="disco-effects" type="checkbox" aria-describedby="disco-effects-note">
+                  Moving lights and confetti
+                </label>
+                <label class="disco-intensity" for="disco-intensity">
+                  Confetti intensity
+                  <select id="disco-intensity">
+                    <option value="gentle">Gentle</option>
+                    <option value="party">Party</option>
+                  </select>
+                </label>
+                <button id="disco-stop" type="button">Stop the show</button>
+              </div>
+              <p id="disco-effects-note" class="helper">
+                Visual effects are optional and off by default. Music plays independently; effects stay off when reduced motion is preferred.
+              </p>
+              <p id="disco-status" class="disco-status" role="status" aria-live="polite" aria-atomic="true">
+                Press play when you’re ready. Music will not start on its own.
+              </p>
+            </fieldset>
+
             <div class="reset-row">
               <button type="button" id="reset">Reset to plain portrait <span aria-hidden="true">↺</span></button>
               <span>All imagination.</span>
@@ -172,5 +211,6 @@
       <span>Play collection 02 · AI-created artwork · Digital styling fiction</span>
     </footer>
     <script type="module" src="atelier.js"></script>
+    <script type="module" src="disco.js"></script>
   </body>
 </html>

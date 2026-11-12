@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
@@ -14,6 +15,8 @@ const root = new URL("../", import.meta.url);
 const manifest = JSON.parse(await readFile(new URL("atelier-manifest.json", root), "utf8"));
 const html = await readFile(new URL("index.html", root), "utf8");
 const css = await readFile(new URL("atelier.css", root), "utf8");
+const discoCss = await readFile(new URL("disco.css", root), "utf8");
+const discoJs = await readFile(new URL("disco.js", root), "utf8");
 
 test("the collection has 336 independent combinations and all artwork files", async () => {
   assert.equal(countCombinations(manifest), 336);
@@ -191,4 +194,43 @@ test("the manifest preserves original canvas dimensions and rendering alignment"
   assert.ok(manifest.categories.flatMap((category) => category.items).every(
     (item) => item.file === null || item.file.endsWith(".webp"),
   ));
+});
+
+test("the Disco Diva player uses the selected self-hosted song and supplied transcript", async () => {
+  const audio = await readFile(new URL("assets/disco/her-name-is-dog.mp3", root));
+  const transcript = await readFile(new URL("assets/disco/lyrics.txt", root), "utf8");
+
+  assert.equal(
+    createHash("sha256").update(audio).digest("hex"),
+    "2246c0d30e0c01399e56af4ff04c80cf570734c0135b0e31bd0e45b9f740b415",
+  );
+  assert.match(html, /<audio[\s\S]*?controls[\s\S]*?preload="metadata"[\s\S]*?src="assets\/disco\/her-name-is-dog\.mp3"/);
+  assert.doesNotMatch(html, /<audio[^>]*\bautoplay\b/);
+  assert.equal([...html.matchAll(/<audio\b/g)].length, 1);
+  assert.match(html, /href="assets\/disco\/lyrics\.txt">Read the lyrics and spoken passages<\/a>/);
+  assert.match(transcript, /^\[Spoken intro, low and glamorous\]/);
+  assert.match(transcript, /\[Final musical hit\]\s*$/);
+});
+
+test("Disco Diva visuals stay decorative, bounded, and motion-aware", async () => {
+  const mirrorBall = await readFile(new URL("assets/disco/mirror-ball.webp", root));
+
+  assert.ok(mirrorBall.length > 0 && mirrorBall.length < 200_000);
+  assert.match(html, /<div class="disco-visuals" id="disco-visuals" aria-hidden="true">/);
+  assert.match(html, /id="disco-effects" type="checkbox" aria-describedby="disco-effects-note"/);
+  assert.doesNotMatch(html, /id="disco-effects"[^>]*checked/);
+  assert.match(html, /id="disco-intensity"/);
+  assert.match(html, /id="disco-stop"/);
+  assert.match(discoCss, /mix-blend-mode:\s*screen/);
+  assert.match(discoCss, /prefers-reduced-motion:\s*reduce/);
+  assert.match(discoJs, /addEventListener\("playing"/);
+  assert.match(discoJs, /addEventListener\("waiting"/);
+  assert.match(discoJs, /addEventListener\("seeking"/);
+  assert.match(discoJs, /addEventListener\("ended"/);
+  assert.match(discoJs, /addEventListener\("error"/);
+  assert.match(discoJs, /addEventListener\("visibilitychange"/);
+  assert.match(discoJs, /window\.innerWidth < 600 \? 30 : 65/);
+  assert.match(discoJs, /ResizeObserver/);
+  assert.match(discoJs, /eventController\.abort\(\)/);
+  assert.doesNotMatch(discoJs, /setInterval|setTimeout/);
 });
