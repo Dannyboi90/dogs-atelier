@@ -9,6 +9,7 @@ const visuals = document.getElementById("disco-visuals");
 const canvas = document.getElementById("disco-confetti");
 
 if (audio && effectsToggle && intensity && stopButton && status && stage && visuals && canvas) {
+  const trackUrl = audio.getAttribute("src");
   const context = canvas.getContext("2d");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const eventController = new AbortController();
@@ -21,6 +22,10 @@ if (audio && effectsToggle && intensity && stopButton && status && stage && visu
   let entered = false;
   let buffering = false;
   let stopPending = false;
+  let preparingTrack = false;
+  let trackReady = false;
+  let preparationController;
+  let trackObjectUrl;
   let width = 0;
   let height = 0;
   let pixelRatio = 1;
@@ -183,7 +188,108 @@ if (audio && effectsToggle && intensity && stopButton && status && stage && visu
     reconcile();
   }
 
+  async function prepareTrack(targetTime, resumePlayback) {
+    if (trackReady || preparingTrack || !trackUrl) {
+      return;
+    }
+
+    preparingTrack = true;
+    const controller = new AbortController();
+    preparationController = controller;
+    audio.pause();
+    status.textContent = "Loading the complete track so playback and seeking work smoothly.";
+
+    let nextObjectUrl;
+    try {
+      const response = await fetch(trackUrl, { signal: controller.signal });
+      if (!response.ok) {
+        throw new Error(`Track request failed with status ${response.status}.`);
+      }
+      const trackBlob = await response.blob();
+      if (controller.signal.aborted) {
+        return;
+      }
+
+      nextObjectUrl = URL.createObjectURL(trackBlob);
+      await new Promise((resolve, reject) => {
+        const cleanup = () => {
+          audio.removeEventListener("loadedmetadata", onLoaded);
+          audio.removeEventListener("error", onError);
+          controller.signal.removeEventListener("abort", onAbort);
+        };
+        const onLoaded = () => {
+          cleanup();
+          resolve();
+        };
+        const onError = () => {
+          cleanup();
+          reject(new Error("The browser could not load the complete track."));
+        };
+        const onAbort = () => {
+          cleanup();
+          reject(new DOMException("Track preparation was cancelled.", "AbortError"));
+        };
+
+        audio.addEventListener("loadedmetadata", onLoaded, { once: true });
+        audio.addEventListener("error", onError, { once: true });
+        controller.signal.addEventListener("abort", onAbort, { once: true });
+        audio.src = nextObjectUrl;
+        audio.load();
+        if (audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
+          onLoaded();
+        }
+      });
+
+      if (controller.signal.aborted) {
+        return;
+      }
+      if (trackObjectUrl) {
+        URL.revokeObjectURL(trackObjectUrl);
+      }
+      trackObjectUrl = nextObjectUrl;
+      nextObjectUrl = undefined;
+      trackReady = true;
+      preparingTrack = false;
+      preparationController = undefined;
+      audio.currentTime = Math.min(Math.max(targetTime, 0), audio.duration);
+
+      if (resumePlayback) {
+        try {
+          await audio.play();
+        } catch (error) {
+          status.textContent = "The track is ready. Press play to start.";
+          console.error("Disco Diva playback could not start.", error);
+        }
+      } else {
+        status.textContent = "The track is ready. Press play when you’re ready.";
+      }
+    } catch (error) {
+      if (nextObjectUrl) {
+        URL.revokeObjectURL(nextObjectUrl);
+      }
+      preparingTrack = false;
+      preparationController = undefined;
+      if (controller.signal.aborted || error.name === "AbortError") {
+        return;
+      }
+      resetShow();
+      status.textContent = "The track could not be prepared. Check your connection and try again.";
+      console.error("Disco Diva track preparation failed.", error);
+    }
+  }
+
+  audio.addEventListener("play", () => {
+    if (preparingTrack) {
+      audio.pause();
+      return;
+    }
+    if (!trackReady) {
+      void prepareTrack(audio.currentTime, true);
+    }
+  }, { signal: eventController.signal });
+
   audio.addEventListener("playing", () => {
+    stopPending = false;
     buffering = false;
     if (!entered) {
       entered = true;
@@ -198,7 +304,7 @@ if (audio && effectsToggle && intensity && stopButton && status && stage && visu
 
   audio.addEventListener("pause", () => {
     buffering = false;
-    if (!audio.ended && !audio.error && !stopPending) {
+    if (!audio.ended && !audio.error && !stopPending && !preparingTrack) {
       status.textContent = "Paused. Resume whenever you’re ready.";
     }
     reconcile();
@@ -226,12 +332,19 @@ if (audio && effectsToggle && intensity && stopButton && status && stage && visu
   }, { signal: eventController.signal });
 
   audio.addEventListener("error", () => {
+    if (preparingTrack) {
+      return;
+    }
     audio.pause();
     resetShow();
     status.textContent = "The song could not be loaded. Check your connection and try again.";
   }, { signal: eventController.signal });
 
   audio.addEventListener("seeking", () => {
+    if (!trackReady) {
+      void prepareTrack(audio.currentTime, !audio.paused);
+      return;
+    }
     particles = [];
     clearCanvas();
     lastAccentSection = Math.floor(audio.currentTime / 45);
@@ -254,7 +367,10 @@ if (audio && effectsToggle && intensity && stopButton && status && stage && visu
   }, { signal: eventController.signal });
 
   stopButton.addEventListener("click", () => {
-    stopPending = !audio.paused;
+    stopPending = true;
+    preparationController?.abort();
+    preparationController = undefined;
+    preparingTrack = false;
     audio.pause();
     if (Number.isFinite(audio.duration)) {
       audio.currentTime = 0;
@@ -285,8 +401,12 @@ if (audio && effectsToggle && intensity && stopButton && status && stage && visu
   updateMotionPreference();
 
   window.addEventListener("pagehide", () => {
+    preparationController?.abort();
     audio.pause();
     resetShow();
+    if (trackObjectUrl) {
+      URL.revokeObjectURL(trackObjectUrl);
+    }
     resizeObserver?.disconnect();
     eventController.abort();
   }, { once: true, signal: eventController.signal });

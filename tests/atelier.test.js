@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 import {
   applyPreset,
   countCombinations,
@@ -17,6 +18,148 @@ const html = await readFile(new URL("index.html", root), "utf8");
 const css = await readFile(new URL("atelier.css", root), "utf8");
 const discoCss = await readFile(new URL("disco.css", root), "utf8");
 const discoJs = await readFile(new URL("disco.js", root), "utf8");
+
+function createDiscoHarness(fetchTrack = async () => ({
+  ok: true,
+  blob: async () => new Blob(["track bytes"], { type: "audio/mpeg" }),
+})) {
+  class FakeClassList {
+    values = new Set();
+    toggle(name, force) {
+      if (force) this.values.add(name);
+      else this.values.delete(name);
+    }
+  }
+
+  class FakeAudio extends EventTarget {
+    paused = true;
+    ended = false;
+    seeking = false;
+    error = null;
+    duration = 292.76;
+    readyState = 1;
+    currentTime = 0;
+    volume = 1;
+    source = "assets/disco/her-name-is-dog.mp3";
+
+    getAttribute(name) {
+      return name === "src" ? this.source : null;
+    }
+
+    set src(value) {
+      this.source = value;
+    }
+
+    get src() {
+      return this.source;
+    }
+
+    load() {
+      this.readyState = 1;
+      this.dispatchEvent(new Event("loadedmetadata"));
+    }
+
+    pause() {
+      if (!this.paused) {
+        this.paused = true;
+        this.dispatchEvent(new Event("pause"));
+      }
+    }
+
+    async play() {
+      this.paused = false;
+      this.dispatchEvent(new Event("play"));
+      if (!this.paused) {
+        this.readyState = 3;
+        this.dispatchEvent(new Event("playing"));
+      }
+    }
+  }
+
+  const audio = new FakeAudio();
+  const effects = new EventTarget();
+  effects.checked = false;
+  effects.disabled = false;
+  const intensity = new EventTarget();
+  intensity.value = "gentle";
+  const stop = new EventTarget();
+  const status = { textContent: "" };
+  const effectsNote = { textContent: "" };
+  const stage = {
+    classList: new FakeClassList(),
+    getBoundingClientRect: () => ({ width: 400, height: 600 }),
+  };
+  const context = {
+    clearRect() {},
+    setTransform() {},
+    save() {},
+    restore() {},
+    translate() {},
+    rotate() {},
+    fillRect() {},
+    beginPath() {},
+    lineTo() {},
+    closePath() {},
+    fill() {},
+  };
+  const canvas = {
+    width: 0,
+    height: 0,
+    getContext: () => context,
+  };
+  const elements = new Map([
+    ["disco-audio", audio],
+    ["disco-effects", effects],
+    ["disco-intensity", intensity],
+    ["disco-stop", stop],
+    ["disco-status", status],
+    ["disco-effects-note", effectsNote],
+    ["disco-visuals", {}],
+    ["disco-confetti", canvas],
+  ]);
+  const document = {
+    hidden: false,
+    getElementById: (id) => elements.get(id),
+    querySelector: () => stage,
+    addEventListener() {},
+  };
+  const window = {
+    devicePixelRatio: 1,
+    innerWidth: 1280,
+    matchMedia: () => Object.assign(new EventTarget(), { matches: false }),
+    addEventListener() {},
+  };
+  let fetchCount = 0;
+  let objectUrlCount = 0;
+
+  runInNewContext(discoJs, {
+    AbortController,
+    Blob,
+    DOMException,
+    Event,
+    HTMLMediaElement: { HAVE_FUTURE_DATA: 3, HAVE_METADATA: 1 },
+    URL: {
+      createObjectURL: () => `blob:track-${++objectUrlCount}`,
+      revokeObjectURL() {},
+    },
+    cancelAnimationFrame() {},
+    document,
+    fetch: (...args) => {
+      fetchCount += 1;
+      return fetchTrack(...args);
+    },
+    matchMedia: window.matchMedia,
+    requestAnimationFrame: () => 1,
+    window,
+    ResizeObserver: class {
+      observe() {}
+      disconnect() {}
+    },
+    console: { error() {} },
+  });
+
+  return { audio, status, stop, get fetchCount() { return fetchCount; } };
+}
 
 test("the collection has 336 independent combinations and all artwork files", async () => {
   assert.equal(countCombinations(manifest), 336);
@@ -204,12 +347,52 @@ test("the Disco Diva player uses the selected self-hosted song and supplied tran
     createHash("sha256").update(audio).digest("hex"),
     "2246c0d30e0c01399e56af4ff04c80cf570734c0135b0e31bd0e45b9f740b415",
   );
-  assert.match(html, /<audio[\s\S]*?controls[\s\S]*?preload="metadata"[\s\S]*?src="assets\/disco\/her-name-is-dog\.mp3"/);
+  assert.match(html, /<audio[\s\S]*?controls[\s\S]*?preload="none"[\s\S]*?src="assets\/disco\/her-name-is-dog\.mp3"/);
   assert.doesNotMatch(html, /<audio[^>]*\bautoplay\b/);
   assert.equal([...html.matchAll(/<audio\b/g)].length, 1);
   assert.match(html, /href="assets\/disco\/lyrics\.txt">Read the lyrics and spoken passages<\/a>/);
   assert.match(transcript, /^\[Spoken intro, low and glamorous\]/);
   assert.match(transcript, /\[Final musical hit\]\s*$/);
+});
+
+test("the Disco Diva player loads a complete seekable track only on demand", async () => {
+  const player = createDiscoHarness();
+  assert.equal(player.fetchCount, 0);
+
+  await player.audio.play();
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(player.fetchCount, 1);
+  assert.match(player.audio.src, /^blob:track-/);
+  assert.equal(player.audio.paused, false);
+  assert.equal(player.status.textContent, "The main event is playing.");
+
+  player.audio.pause();
+  player.audio.currentTime = 120;
+  player.audio.dispatchEvent(new Event("seeking"));
+  assert.equal(player.audio.currentTime, 120);
+  assert.equal(player.fetchCount, 1);
+
+  player.stop.dispatchEvent(new Event("click"));
+  assert.equal(player.audio.paused, true);
+  assert.equal(player.audio.currentTime, 0);
+  assert.equal(player.status.textContent, "Show stopped.");
+});
+
+test("stopping while the Disco Diva track is loading cancels preparation", async () => {
+  const player = createDiscoHarness((url, { signal }) => new Promise((resolve, reject) => {
+    signal.addEventListener("abort", () => {
+      reject(new DOMException("Aborted.", "AbortError"));
+    }, { once: true });
+  }));
+
+  await player.audio.play();
+  assert.equal(player.status.textContent, "Loading the complete track so playback and seeking work smoothly.");
+  player.stop.dispatchEvent(new Event("click"));
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(player.audio.paused, true);
+  assert.equal(player.status.textContent, "Show stopped.");
 });
 
 test("Disco Diva visuals stay decorative, bounded, and motion-aware", async () => {
@@ -226,6 +409,11 @@ test("Disco Diva visuals stay decorative, bounded, and motion-aware", async () =
   assert.match(discoJs, /addEventListener\("playing"/);
   assert.match(discoJs, /addEventListener\("waiting"/);
   assert.match(discoJs, /addEventListener\("seeking"/);
+  assert.match(discoJs, /fetch\(trackUrl, \{ signal: controller\.signal \}\)/);
+  assert.match(discoJs, /await response\.blob\(\)/);
+  assert.match(discoJs, /URL\.createObjectURL\(trackBlob\)/);
+  assert.match(discoJs, /audio\.currentTime = Math\.min\(Math\.max\(targetTime, 0\), audio\.duration\)/);
+  assert.match(discoJs, /preparationController\?\.abort\(\)/);
   assert.match(discoJs, /addEventListener\("ended"/);
   assert.match(discoJs, /addEventListener\("error"/);
   assert.match(discoJs, /addEventListener\("visibilitychange"/);
