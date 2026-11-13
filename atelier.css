@@ -18,42 +18,12 @@ body {
   margin: 0;
   background: var(--page);
   color: var(--ink);
-  font: 15px/1.6 system-ui, -apple-system, sans-serif;
+  font: 15px/1.6 var(--cnd-font);
 }
 
-.site-header,
-main,
-.site-footer {
-  width: min(1180px, calc(100% - 64px));
+main {
+  width: min(100% - 2.5rem, var(--cnd-width));
   margin-inline: auto;
-}
-
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 26px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.wordmark {
-  color: inherit;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.7px;
-  text-decoration: none;
-}
-
-.collection-mark {
-  font-size: 10px;
-  letter-spacing: 2px;
-}
-
-.collection-mark i {
-  padding-inline: 18px;
-  color: var(--gold);
-  font-size: 18px;
 }
 
 h1,
@@ -307,19 +277,11 @@ legend span {
   font: italic 34px/1.3 Georgia, serif;
 }
 
-.site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 24px 0;
-  border-top: 1px solid var(--line);
+.closing .closing-note {
+  margin-top: 28px;
   color: var(--muted);
-  font-size: 11px;
-}
-
-.back-home {
-  color: inherit;
-  text-underline-offset: 3px;
+  font: 11px/1.6 var(--cnd-font);
+  letter-spacing: 0.5px;
 }
 
 .asset-message,
@@ -355,19 +317,6 @@ legend span {
   white-space: nowrap;
 }
 
-.skip {
-  position: fixed;
-  z-index: 4;
-  top: -100px;
-  padding: 12px;
-  background: var(--surface);
-  color: var(--ink);
-}
-
-.skip:focus {
-  top: 8px;
-}
-
 [hidden] {
   display: none !important;
 }
@@ -375,24 +324,20 @@ legend span {
 @media (min-width: 900px) {
   .portrait-panel {
     position: sticky;
-    top: 24px;
+    /* Clear the sticky site header (5rem tall). */
+    top: calc(5rem + 24px);
   }
 }
 
 @media (max-width: 800px) {
-  .site-header,
-  main,
-  .site-footer {
-    width: calc(100% - 36px);
+  /* On phones the portrait stays pinned while you style her, so the shared
+     site header scrolls away here instead of covering it. */
+  .cnd-header {
+    position: static;
   }
 
-  .collection-mark {
-    font-size: 8px;
-    letter-spacing: 1px;
-  }
-
-  .collection-mark i {
-    padding-inline: 5px;
+  main {
+    width: min(100% - 2rem, var(--cnd-width));
   }
 
   .intro {
@@ -491,9 +436,6 @@ legend span {
     font-size: 27px;
   }
 
-  .site-footer {
-    flex-direction: column;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
