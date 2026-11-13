@@ -41,8 +41,9 @@ Dog's Couture Atelier was built by Daniel with the help of AI tools. Daniel set 
 
 | Tool | Role in the project |
 | --- | --- |
-| [GitHub Copilot](https://github.com/features/copilot) | Built the first version of the Atelier and the Disco Diva player |
-| [Magnific](https://www.magnific.com) | Generated the mirror-ball artwork |
+| [GitHub Copilot](https://github.com/features/copilot) Pro | Built the first version of the Atelier and the Disco Diva player |
+| [ChatGPT](https://chatgpt.com) by [OpenAI](https://openai.com) and [Magnific](https://www.magnific.com) | Created Dog's portrait, the styling layers and the mirror-ball artwork |
+| [Suno](https://suno.com) | Generated the song *Her Name Is Dog (The Main Event)* |
 | [Claude](https://claude.ai) by [Anthropic](https://www.anthropic.com) | Moved the Atelier onto the shared catnamed.dog navigation, prepared it for GitHub Pages and wrote this README |
 | [GitHub Pages](https://pages.github.com) | Hosts the live site |
 
@@ -92,7 +93,7 @@ The player uses the supplied *Her Name Is Dog (The Main Event)* MP3 unchanged. T
 ## License
 
 - **Code:** released under the [MIT License](LICENSE).
-- **Artwork, music and lyrics:** © 2026 Daniel Nader, all rights reserved. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md).
+- **Artwork, music and lyrics:** © 2026 Daniel Nader, all rights reserved. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md). Daniel confirmed his plans with ChatGPT, Magnific and Suno give him full commercial rights to publish their outputs.
 - **Inter font:** SIL Open Font License 1.1, see `site-chrome/OFL.txt`.
 
 ## Accessibility
