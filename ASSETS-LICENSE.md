@@ -21,6 +21,6 @@ The Inter font in `site-chrome/` is not Daniel's work. It is © The Inter Projec
 
 - Dog's portrait and the styling layers are AI-created artwork based on Daniel's cat, made with ChatGPT and Magnific. No makeup, perfume or costume was ever put on the real Dog.
 - The mirror ball is a compressed copy of artwork generated with Magnific. The original stays outside this repository.
-- The song was generated with Suno; the lyrics are Daniel's.
+- The song was generated with Suno.
 
 Daniel confirmed his plans with ChatGPT, Magnific and Suno give him full commercial rights to publish the outputs.
