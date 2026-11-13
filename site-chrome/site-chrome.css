@@ -1,0 +1,262 @@
+/*
+  catnamed.dog shared site chrome, version 1.0
+  The header, footer, font and colors shared by catnamed.dog, the Atelier
+  (studio.catnamed.dog) and Dog's Room (room.catnamed.dog).
+
+  Keep every copy of this folder identical. The original lives in the
+  catnamed.dog repository at public/site-chrome/. When it changes there,
+  copy the whole folder into dogs-atelier and dogs-room as well.
+
+  Every class and variable starts with "cnd-" so it never clashes with a
+  page's own styles.
+*/
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("inter-latin-wght-normal.woff2") format("woff2-variations"),
+    url("inter-latin-wght-normal.woff2") format("woff2");
+}
+
+:root {
+  --cnd-page: #f5f1e8;
+  --cnd-ink: #17233c;
+  --cnd-muted: #4e5e77;
+  --cnd-blue: #24427f;
+  --cnd-blue-dark: #193568;
+  --cnd-line: rgb(23 35 60 / 15%);
+  --cnd-glass: rgb(245 241 232 / 88%);
+  --cnd-wash: #e9edf5;
+  --cnd-focus: #95651a;
+  --cnd-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --cnd-width: 76rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cnd-page: #10182a;
+    --cnd-ink: #f5f1e8;
+    --cnd-muted: #c2cadd;
+    --cnd-blue: #aec2ff;
+    --cnd-blue-dark: #c8d5ff;
+    --cnd-line: rgb(232 238 255 / 17%);
+    --cnd-glass: rgb(16 24 42 / 88%);
+    --cnd-wash: #1b2842;
+    --cnd-focus: #f3cb78;
+  }
+}
+
+/* Skip link */
+
+.cnd-skip {
+  position: fixed;
+  z-index: 30;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.65rem 1rem;
+  transform: translateY(-160%);
+  border-radius: 0.5rem;
+  background: var(--cnd-ink);
+  color: var(--cnd-page);
+  font: 700 1rem/1.4 var(--cnd-font);
+  text-decoration: none;
+}
+
+.cnd-skip:focus {
+  transform: translateY(0);
+}
+
+/* Header */
+
+.cnd-header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  background: var(--cnd-glass);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  font-family: var(--cnd-font);
+  line-height: 1.4;
+}
+
+.cnd-bar,
+.cnd-footer-inner {
+  width: min(100% - 2.5rem, var(--cnd-width));
+  margin-inline: auto;
+}
+
+.cnd-bar {
+  display: flex;
+  min-height: 5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--cnd-line);
+}
+
+.cnd-wordmark {
+  color: var(--cnd-ink);
+  font-family: var(--cnd-font);
+  font-size: 1rem;
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  text-decoration: none;
+}
+
+.cnd-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2.6vw, 1.75rem);
+  font-size: 0.9rem;
+}
+
+.cnd-link {
+  color: var(--cnd-muted);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+.cnd-link:hover {
+  color: var(--cnd-blue-dark);
+}
+
+.cnd-link[aria-current="page"] {
+  color: var(--cnd-ink);
+  font-weight: 680;
+  text-decoration-thickness: 2px;
+}
+
+.cnd-pill {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--cnd-line);
+  border-radius: 999px;
+  color: var(--cnd-blue-dark);
+  font-weight: 680;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.cnd-pill:hover,
+.cnd-pill[aria-current="page"] {
+  border-color: var(--cnd-blue);
+  background: var(--cnd-wash);
+}
+
+.cnd-header a:focus-visible,
+.cnd-footer a:focus-visible {
+  outline: 3px solid var(--cnd-focus);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+.cnd-header .cnd-pill:focus-visible {
+  border-radius: 999px;
+}
+
+/* Footer */
+
+.cnd-footer {
+  color: var(--cnd-muted);
+  font-family: var(--cnd-font);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.cnd-footer-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem 2rem;
+  padding-block: 1.75rem 2.25rem;
+  border-top: 1px solid var(--cnd-line);
+}
+
+.cnd-footer-inner p {
+  margin: 0;
+  text-align: center;
+}
+
+.cnd-footer-inner > span {
+  justify-self: end;
+}
+
+/* Smaller screens */
+
+@media (max-width: 760px) {
+  .cnd-bar,
+  .cnd-footer-inner {
+    width: min(100% - 2rem, var(--cnd-width));
+  }
+
+  .cnd-bar {
+    min-height: 4.5rem;
+  }
+
+  .cnd-nav {
+    gap: 0.8rem;
+    font-size: 0.84rem;
+  }
+
+  .cnd-pill {
+    min-height: 2.55rem;
+    padding-inline: 0.75rem;
+  }
+
+  .cnd-footer-inner {
+    grid-template-columns: 1fr auto;
+    gap: 0.65rem 1rem;
+  }
+
+  .cnd-footer-inner p {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .cnd-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.3rem;
+    padding-block: 0.65rem;
+  }
+
+  .cnd-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 360px) {
+  .cnd-bar,
+  .cnd-footer-inner {
+    width: min(100% - 1.5rem, var(--cnd-width));
+  }
+
+  .cnd-nav {
+    gap: 0.5rem;
+    font-size: 0.78rem;
+  }
+
+  .cnd-pill {
+    min-height: 2.4rem;
+    padding-inline: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cnd-pill {
+    transition: none;
+  }
+}

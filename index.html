@@ -7,19 +7,27 @@
     <meta name="description" content="A playful digital styling atelier for Dog, with 336 imaginative combinations of color, velvet, and jewels.">
     <title>Dog’s Couture Atelier | catnamed.dog</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="site-chrome/site-chrome.css">
     <link rel="stylesheet" href="atelier.css">
     <link rel="stylesheet" href="disco.css">
   </head>
   <body>
-    <a class="skip" href="#main">Skip to atelier</a>
-    <header class="site-header">
-      <a class="wordmark" href="https://catnamed.dog/" aria-label="Catnamed.dog home">catnamed.dog</a>
-      <span class="collection-mark">THE ATELIER <i aria-hidden="true">✦</i> PLAY COLLECTION 02</span>
+    <a class="cnd-skip" href="#main">Skip to the atelier</a>
+    <header class="cnd-header">
+      <div class="cnd-bar">
+        <a class="cnd-wordmark" href="https://catnamed.dog/" aria-label="catnamed.dog home">catnamed.dog</a>
+        <nav class="cnd-nav" aria-label="Main navigation">
+          <a class="cnd-link" href="https://catnamed.dog/#about">About</a>
+          <a class="cnd-link" href="https://catnamed.dog/dog/">Meet Dog</a>
+          <a class="cnd-link" href="https://studio.catnamed.dog/" aria-current="page">Atelier</a>
+          <a class="cnd-pill" href="https://room.catnamed.dog/">Dog's Room</a>
+        </nav>
+      </div>
     </header>
 
     <main id="main" tabindex="-1">
       <div class="intro">
-        <p class="eyebrow">A digital styling atelier</p>
+        <p class="eyebrow">Dog’s Couture Atelier <span aria-hidden="true">✦</span> Play collection 02</p>
         <h1>One muse.<br><em>Make an entrance.</em></h1>
         <p class="lede">More color. More sparkle. Absolutely no reason to be sensible.</p>
       </div>
@@ -203,12 +211,16 @@
       <section class="closing" aria-label="Atelier note">
         <span class="eyebrow">Silk. Shimmer. A certain attitude.</span>
         <p>There is no wrong occasion<br>for a little imagination.</p>
+        <p class="closing-note">Play collection 02 · AI-created artwork · Digital styling fiction</p>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <a class="back-home" href="https://catnamed.dog/">← Back to home</a>
-      <span>Play collection 02 · AI-created artwork · Digital styling fiction</span>
+    <footer class="cnd-footer">
+      <div class="cnd-footer-inner">
+        <a class="cnd-wordmark" href="https://catnamed.dog/">catnamed.dog</a>
+        <p>A personal home for Dog, AI curiosity, and small experiments.</p>
+        <span>Made by Daniel, for Dog.</span>
+      </div>
     </footer>
     <script type="module" src="atelier.js"></script>
     <script type="module" src="disco.js"></script>
