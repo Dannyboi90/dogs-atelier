@@ -48,6 +48,11 @@
   }
 }
 
+/* Keep anchor targets (including the skip link's) clear of the sticky header. */
+html {
+  scroll-padding-top: 6rem;
+}
+
 /* Skip link */
 
 .cnd-skip {
