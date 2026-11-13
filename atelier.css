@@ -330,6 +330,12 @@ legend span {
 }
 
 @media (max-width: 800px) {
+  /* On phones the portrait stays pinned while you style her, so the shared
+     site header scrolls away here instead of covering it. */
+  .cnd-header {
+    position: static;
+  }
+
   main {
     width: min(100% - 2rem, var(--cnd-width));
   }
